@@ -1,0 +1,2 @@
+# koiuranai
+占い
