@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>恋おみくじ｜結果</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header><h1>恋おみくじの結果</h1></header>
+
+<main>
+  <div class="result-box" id="result">占い中...</div>
+
+  <button class="btn" onclick="drawOmikuji()">もう一回引く</button>
+
+  <p><a href="index.html">トップへ戻る</a></p>
+</main>
+
+<script>
+  function drawOmikuji() {
+    const results = [
+      "大吉：運命の相手が近づいています。",
+      "中吉：今日は積極的な行動が吉。",
+      "小吉：自然体でいると魅力が伝わります。",
+      "吉：新しい出会いが期待できそう。",
+      "末吉：焦らずゆっくり関係を築いて。",
+      "凶：今日は無理に動かず様子見が◎。"
+    ];
+    const r = Math.floor(Math.random() * results.length);
+    document.getElementById("result").textContent = results[r];
+  }
+  drawOmikuji();
+</script>
+
+</body>
+</html>
