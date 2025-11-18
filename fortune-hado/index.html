@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>名前波動占い</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+.container {
+  max-width: 550px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 25px rgba(0,0,0,.1);
+}
+.bar {
+  height: 14px;
+  background: #ff89c6;
+  border-radius: 10px;
+  transition: width 1s;
+}
+.label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>名前波動占い</h1>
+  <input id="name" placeholder="名前を入力">
+  <button onclick="analyze()">占う</button>
+  <div id="result" class="result" style="display:none;"></div>
+</div>
+
+<script src="./hado.js"></script>
+</body>
+</html>

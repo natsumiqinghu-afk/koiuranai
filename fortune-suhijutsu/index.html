@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>名前数秘術</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+.wrap {
+  background: white;
+  max-width: 550px;
+  margin: 40px auto;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 22px rgba(0,0,0,.08);
+}
+.result {
+  margin-top: 25px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #f9fbff;
+  border: 1px solid #e5efff;
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<h1>名前数秘術</h1>
+<input id="name" placeholder="ローマ字で入力（例：Taro）">
+<button onclick="calc()">占う</button>
+<div id="result" class="result" style="display:none;"></div>
+</div>
+
+<script src="./suhijutsu.js"></script>
+</body>
+</html>

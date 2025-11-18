@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>相性占い</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+.box {
+  background: white;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+}
+input, button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+button {
+  background: #7b4fff;
+  color: white;
+  font-size: 18px;
+  border: none;
+}
+button:hover { background:#6c3aff; }
+.result {
+  margin-top: 30px;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 12px;
+  border: 1px solid #eee;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+<h1>名前 × 誕生日 相性占い</h1>
+
+<h3>あなた</h3>
+<input id="name1" placeholder="名前">
+<input id="birth1" type="date">
+
+<h3>相手</h3>
+<input id="name2" placeholder="名前">
+<input id="birth2" type="date">
+
+<button onclick="check()">占う</button>
+<div id="result" class="result" style="display:none;"></div>
+</div>
+
+<script src="./aisho.js"></script>
+</body>
+</html>
