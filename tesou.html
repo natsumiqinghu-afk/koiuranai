@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER-PALM // Digital Destiny Scanner</title>
+    <style>
+        :root {
+            --primary: #0f0;
+            --secondary: #00ffcc;
+            --bg: #050505;
+            --grid: #1a1a1a;
+            --scan-line: rgba(0, 255, 0, 0.5);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--primary);
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            user-select: none;
+        }
+
+        /* 背景のグリッドとCRT効果 */
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .container {
+            position: relative;
+            width: 320px;
+            height: 500px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 20px var(--primary), inset 0 0 20px var(--primary);
+            background: rgba(0, 20, 0, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* 手のひらエリア */
+        .hand-area {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            margin-top: 20px;
+        }
+
+        /* 手のSVGガイド */
+        .hand-outline {
+            width: 200px;
+            height: 300px;
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 2;
+            stroke-dasharray: 10 5;
+            opacity: 0.3;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s;
+        }
+
+        /* 生成される手相線を描くキャンバス */
+        #palmCanvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        /* スキャンバー */
+        .scan-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--secondary);
+            box-shadow: 0 0 15px var(--secondary);
+            opacity: 0;
+            z-index: 5;
+        }
+
+        .scanning .scan-bar {
+            opacity: 1;
+            animation: scanMove 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+        }
+
+        @keyframes scanMove {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+        }
+
+        /* UI要素 */
+        h1 {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 15px 0;
+            text-shadow: 0 0 5px var(--primary);
+        }
+
+        .btn {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 10px 30px;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 結果表示オーバーレイ */
+        .result-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+            z-index: 20;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .result-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .data-text {
+            font-size: 0.8rem;
+            text-align: left;
+            width: 100%;
+            margin-bottom: 5px;
+            color: var(--secondary);
+        }
+
+        .glitch-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: relative;
+            animation: glitch 1s infinite;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 2px 0 red, -2px 0 blue; }
+            25% { text-shadow: -2px 0 red, 2px 0 blue; }
+            50% { text-shadow: 2px 0 red, -2px 0 blue; }
+            75% { text-shadow: -2px 0 red, 2px 0 blue; }
+            100% { text-shadow: 2px 0 red, -2px 0 blue; }
+        }
+
+        .result-detail {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            border-top: 1px solid var(--secondary);
+            border-bottom: 1px solid var(--secondary);
+            padding: 15px 0;
+        }
+
+        /* 装飾的な点滅 */
+        .status-light {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 10px;
+            height: 10px;
+            background: red;
+            border-radius: 50%;
+        }
+        .status-light.active {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+            animation: blink 0.5s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+    </style>
+</head>
+<body>
+
+<div class="crt-overlay"></div>
+
+<div class="container">
+    <div class="status-light" id="statusLight"></div>
+    <h1>Cyber-Palm v9.0</h1>
+    
+    <div class="hand-area" id="handArea">
+        <div class="scan-bar"></div>
+        <svg class="hand-outline" viewBox="0 0 100 150">
+            <path d="M20,150 L20,100 L10,80 L15,50 L25,50 L30,80 L35,40 L45,40 L45,80 L50,30 L60,30 L60,80 L65,40 L75,40 L75,90 L85,100 L85,150 Z" />
+        </svg>
+        <canvas id="palmCanvas" width="200" height="300"></canvas>
+    </div>
+
+    <button class="btn" id="scanBtn">INITIATE SCAN</button>
+
+    <div class="result-overlay" id="resultOverlay">
+        <div class="data-text">ID: UNKNOWN</div>
+        <div class="data-text">BIOMETRICS: MATCHED</div>
+        <div class="glitch-text">ANALYSIS COMPLETE</div>
+        <div class="result-detail" id="resultText">
+            Loading destiny matrix...
+        </div>
+        <button class="btn" id="resetBtn">RESET SYSTEM</button>
+    </div>
+</div>
+
+<script>
+    // 定数と要素の取得
+    const scanBtn = document.getElementById('scanBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const handArea = document.getElementById('handArea');
+    const resultOverlay = document.getElementById('resultOverlay');
+    const resultText = document.getElementById('resultText');
+    const canvas = document.getElementById('palmCanvas');
+    const ctx = canvas.getContext('2d');
+    const statusLight = document.getElementById('statusLight');
+
+    // 占い結果のデータベース（サイバーパンク風）
+    const fortunes = [
+        {
+            title: "【生命線：サーバーダウン寸前】",
+            desc: "あなたのCPU使用率は常に99%です。早急に「睡眠」という名の再起動が必要です。カフェインの過剰摂取によるシステムエラーに注意してください。"
+        },
+        {
+            title: "【運命線：バグまみれのアップデート】",
+            desc: "予期せぬ仕様変更（トラブル）が多発しますが、あなたはそれを「機能（仕様）」と言い張る力を持っています。デバッグ能力（忍耐力）が高まるでしょう。"
+        },
+        {
+            title: "【感情線：強力なファイアウォール】",
+            desc: "他人に対して鉄壁のセキュリティを誇っています。アクセス権限を与えるのは、美味しいご飯をくれる人だけにする設定が有効になっています。"
+        },
+        {
+            title: "【知能線：オーバークロック状態】",
+            desc: "思考回路が高速回転しています。素晴らしいアイデアが浮かびますが、メモリ不足で3秒後に忘れる可能性があります。外部ストレージ（メモ帳）を活用せよ。"
+        },
+        {
+            title: "【金運線：仮想通貨の如し】",
+            desc: "乱高下が激しい相場です。衝動的な課金（マイクロトランザクション）により、給料日前は低電力モードでの稼働を余儀なくされるでしょう。"
+        }
+    ];
+
+    // キャンバスにランダムな手相を描く関数
+    function drawDigitalLines() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = '#0f0';
+        ctx.lineWidth = 2;
+        ctx.shadowBlur = 5;
+        ctx.shadowColor = '#0f0';
+
+        // 3〜5本の主要な線を描く
+        const lines = Math.floor(Math.random() * 3) + 3;
+
+        for (let i = 0; i < lines; i++) {
+            ctx.beginPath();
+            // 手のひらの中央付近からランダムに
+            const startX = 50 + Math.random() * 100;
+            const startY = 150 + Math.random() * 100;
+            const cp1X = Math.random() * 200;
+            const cp1Y = Math.random() * 300;
+            const cp2X = Math.random() * 200;
+            const cp2Y = Math.random() * 300;
+            const endX = Math.random() * 200;
+            const endY = Math.random() * 200;
+
+            ctx.moveTo(startX, startY);
+            ctx.bezierCurveTo(cp1X, cp1Y, cp2X, cp2Y, endX, endY);
+            ctx.stroke();
+        }
+    }
+
+    // スキャン処理の実行
+    scanBtn.addEventListener('click', () => {
+        // UI更新
+        scanBtn.disabled = true;
+        scanBtn.innerText = "SCANNING...";
+        handArea.classList.add('scanning');
+        statusLight.classList.add('active');
+
+        // デジタル手相生成アニメーション
+        let frame = 0;
+        const drawInterval = setInterval(() => {
+            drawDigitalLines(); // スキャン中に線がパラパラ変わる演出
+            frame++;
+            if(frame > 20) clearInterval(drawInterval);
+        }, 100);
+
+        // 3秒後に結果表示
+        setTimeout(() => {
+            finishScan();
+        }, 3000);
+    });
+
+    // スキャン終了と結果生成
+    function finishScan() {
+        handArea.classList.remove('scanning');
+        statusLight.classList.remove('active');
+        
+        // 最終的な線を確定描画
+        drawDigitalLines();
+
+        // ランダムな結果を取得
+        const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+        
+        // 結果テキストのアニメーション表示（タイプライター風）
+        const fullText = `${fortune.title}<br>${fortune.desc}`;
+        resultText.innerHTML = ""; 
+        resultOverlay.classList.add('visible');
+        
+        // タイプライター演出
+        let i = 0;
+        const typeWriter = setInterval(() => {
+            // HTMLタグの処理が面倒なので、簡易的に全文一括置換＋グリッチ文字追加などで演出も可能だが
+            // ここではシンプルに表示する
+            resultText.innerHTML = fullText;
+            clearInterval(typeWriter);
+        }, 100);
+    }
+
+    // リセットボタン
+    resetBtn.addEventListener('click', () => {
+        resultOverlay.classList.remove('visible');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        scanBtn.disabled = false;
+        scanBtn.innerText = "INITIATE SCAN";
+    });
+
+</script>
+</body>
+</html>
