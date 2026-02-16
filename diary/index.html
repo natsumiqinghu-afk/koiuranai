@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>育児日記一覧 | ママミーヤ</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary-color: #ff8ba7;
+      --accent-color: #ffc6c7;
+      --text-color: #594a4e;
+      --bg-gradient: linear-gradient(135deg, #fff0f3 0%, #fff 100%);
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      color: var(--text-color);
+      background: var(--bg-gradient);
+      margin: 0;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: 0.3s;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 0 20px;
+    }
+
+    header .site-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      margin: 0;
+      letter-spacing: 0.1em;
+    }
+
+    header .site-name:hover {
+      opacity: 0.8;
+    }
+
+    .breadcrumb {
+      font-size: 0.85rem;
+      color: #999;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .breadcrumb a {
+      color: var(--primary-color);
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin: 0 0 10px 0;
+    }
+
+    .page-header p {
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    /* 月別セクション */
+    .month-section {
+      margin-bottom: 50px;
+    }
+
+    .month-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.4rem;
+      color: var(--primary-color);
+      margin: 0 0 20px 0;
+      padding: 15px 20px;
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* 日記カードリスト */
+    .diary-list {
+      display: grid;
+      gap: 20px;
+    }
+
+    .diary-card {
+      background: var(--white);
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border: 1px solid transparent;
+      transition: 0.3s;
+      display: flex;
+      gap: 20px;
+    }
+
+    .diary-card:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    .diary-date {
+      flex-shrink: 0;
+      text-align: center;
+      padding: 15px;
+      background: var(--accent-color);
+      border-radius: 10px;
+      min-width: 80px;
+    }
+
+    .diary-date .day {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      line-height: 1;
+    }
+
+    .diary-date .month {
+      font-size: 0.9rem;
+      color: var(--text-color);
+      margin-top: 5px;
+    }
+
+    .diary-content {
+      flex: 1;
+    }
+
+    .diary-content h3 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.3rem;
+      color: var(--primary-color);
+      margin: 0 0 10px 0;
+    }
+
+    .diary-content p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 10px;
+      color: #666;
+    }
+
+    .diary-content .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .tag {
+      background: #f5f5f5;
+      color: var(--text-color);
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* 広告 */
+    .ad-space {
+      margin: 30px 0;
+      text-align: center;
+      background: rgba(255,255,255,0.5);
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    /* フッター */
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      margin-top: 50px;
+      padding-bottom: 30px;
+      color: #999;
+    }
+
+    footer a:hover {
+      color: var(--primary-color);
+    }
+
+    @media (max-width: 480px) {
+      .diary-card {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .diary-date {
+        min-width: auto;
+        padding: 10px 15px;
+      }
+
+      .diary-date .day {
+        display: inline;
+        font-size: 1.5rem;
+      }
+
+      .diary-date .month {
+        display: inline;
+        margin-left: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <a href="../index.html" class="site-name">
+      <i class="fa-solid fa-baby-carriage"></i> ママミーヤ
+    </a>
+  </header>
+
+  <nav class="breadcrumb">
+    <a href="../index.html">ホーム</a>
+    <i class="fa-solid fa-chevron-right"></i>
+    <span>育児日記一覧</span>
+  </nav>
+
+  <div class="page-header">
+    <h1>育児日記</h1>
+    <p>毎日の子育ての記録と小さな発見</p>
+  </div>
+
+  <main>
+    
+    <!-- 2025年2月 -->
+    <section class="month-section">
+      <h2 class="month-title">
+        <i class="fa-regular fa-calendar"></i>
+        2025年2月
+      </h2>
+
+      <div class="diary-list">
+        
+        <!-- 2月17日 -->
+        <a href="2025-02-17.html" class="diary-card">
+          <div class="diary-date">
+            <div class="day">17</div>
+            <div class="month">2月</div>
+          </div>
+          <div class="diary-content">
+            <h3>今日のイヤイヤ期対策が大成功！</h3>
+            <p>朝から「いやー！」の連発だった娘。でも、選択肢を与える作戦が功を奏しました。「赤い服と青い服、どっちがいい？」って聞いたら、自分で選んで嬉しそうに着替えてくれた♪</p>
+            <div class="tags">
+              <span class="tag"><i class="fa-solid fa-tag"></i> イヤイヤ期</span>
+              <span class="tag"><i class="fa-solid fa-tag"></i> 2歳児</span>
+              <span class="tag"><i class="fa-solid fa-tag"></i> 育児ハック</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 2月16日 -->
+        <a href="2025-02-16.html" class="diary-card">
+          <div class="diary-date">
+            <div class="day">16</div>
+            <div class="month">2月</div>
+          </div>
+          <div class="diary-content">
+            <h3>初めての離乳食、感動の瞬間</h3>
+            <p>ついに離乳食スタート！10倍がゆを一口食べた時の、あの不思議そうな顔がたまらなく可愛かった。最初は口から出しちゃったけど、2口目からはパクパク。</p>
+            <div class="tags">
+              <span class="tag"><i class="fa-solid fa-tag"></i> 離乳食</span>
+              <span class="tag"><i class="fa-solid fa-tag"></i> 5ヶ月</span>
+              <span class="tag"><i class="fa-solid fa-tag"></i> 初めて</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 2月15日 -->
+        <a href="2025-02-15.html" class="diary-card">
+          <div class="diary-date">
+            <div class="day">15</div>
+            <div class="month">2月</div>
+          </div>
+          <div class="diary-content">
+            <h3>夜泣き対策グッズを試してみた</h3>
+            <p>最近話題のホワイトノイズマシンを購入。半信半疑だったけど、これが意外と効果あり！いつもなら2時間おきに起きる息子が、4時間も寝てくれた。</p>
+            <div class="tags">
+              <span class="tag"><i class="fa-solid fa-tag"></i> 夜泣き</span>
+              <span class="tag"><i class="fa-solid fa-tag"></i> 睡眠</span>
+              <span class="tag"><i class="fa-solid fa-tag"></i> 育児グッズ</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <div class="ad-space">
+      <p style="font-size:10px; color:#ccc;">SPONSORED</p>
+    </div>
+
+    <!-- 2025年1月（サンプル - 実際の記事は作成していません） -->
+    <section class="month-section">
+      <h2 class="month-title">
+        <i class="fa-regular fa-calendar"></i>
+        2025年1月
+      </h2>
+
+      <div class="diary-list">
+        
+        <div class="diary-card" style="opacity: 0.6; pointer-events: none;">
+          <div class="diary-date">
+            <div class="day">31</div>
+            <div class="month">1月</div>
+          </div>
+          <div class="diary-content">
+            <h3>お正月明けの保育園、涙の別れ</h3>
+            <p>長いお休み明けの保育園初日。案の定、大泣きでした。でも先生から「すぐに泣き止んで遊んでましたよ」と聞いて一安心。成長してるんだなぁ...</p>
+            <div class="tags">
+              <span class="tag"><i class="fa-solid fa-tag"></i> 保育園</span>
+              <span class="tag"><i class="fa-solid fa-tag"></i> 1歳児</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="diary-card" style="opacity: 0.6; pointer-events: none;">
+          <div class="diary-date">
+            <div class="day">15</div>
+            <div class="month">1月</div>
+          </div>
+          <div class="diary-content">
+            <h3>初めての「ママ」が聞けた日</h3>
+            <p>ついに息子が「ママ」って言ってくれた！9ヶ月目にして、やっと。嬉しすぎて涙が止まらなかった。何度も「ママ」って呼んでもらいました。</p>
+            <div class="tags">
+              <span class="tag"><i class="fa-solid fa-tag"></i> 成長記録</span>
+              <span class="tag"><i class="fa-solid fa-tag"></i> 9ヶ月</span>
+              <span class="tag"><i class="fa-solid fa-tag"></i> 初めて</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <a href="../privacy.html">プライバシーポリシー</a> ｜ 
+    <a href="../contact.html">お問い合わせ</a> ｜
+    <a href="../about.html">このサイトについて</a>
+    <p>&copy; 2025 ママミーヤ</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
