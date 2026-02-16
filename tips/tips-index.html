@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>育児ハック・tips集 | ママミーヤ</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary-color: #ff8ba7;
+      --accent-color: #ffc6c7;
+      --text-color: #594a4e;
+      --bg-gradient: linear-gradient(135deg, #fff0f3 0%, #fff 100%);
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      color: var(--text-color);
+      background: var(--bg-gradient);
+      margin: 0;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: 0.3s;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 0 20px;
+    }
+
+    header .site-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      margin: 0;
+      letter-spacing: 0.1em;
+    }
+
+    header .site-name:hover {
+      opacity: 0.8;
+    }
+
+    .breadcrumb {
+      font-size: 0.85rem;
+      color: #999;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .breadcrumb a {
+      color: var(--primary-color);
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin: 0 0 10px 0;
+    }
+
+    .page-header p {
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    /* カテゴリタブ */
+    .category-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .category-tabs button {
+      background: var(--white);
+      border: 2px solid var(--accent-color);
+      color: var(--text-color);
+      padding: 10px 25px;
+      border-radius: 25px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: inherit;
+    }
+
+    .category-tabs button:hover,
+    .category-tabs button.active {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    /* ハックカードグリッド */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .tip-card {
+      background: var(--white);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border: 1px solid transparent;
+      transition: 0.3s;
+    }
+
+    .tip-card:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .tip-icon {
+      background: linear-gradient(135deg, var(--accent-color), #ffd6d6);
+      padding: 30px;
+      text-align: center;
+      font-size: 3rem;
+      color: var(--primary-color);
+    }
+
+    .tip-content {
+      padding: 25px;
+    }
+
+    .tip-content h3 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.2rem;
+      color: var(--primary-color);
+      margin: 0 0 10px 0;
+    }
+
+    .tip-content p {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .tip-label {
+      display: inline-block;
+      background: var(--accent-color);
+      color: var(--text-color);
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 0.75rem;
+      margin-top: 10px;
+    }
+
+    /* 広告 */
+    .ad-space {
+      margin: 30px 0;
+      text-align: center;
+      background: rgba(255,255,255,0.5);
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    /* フッター */
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      margin-top: 50px;
+      padding-bottom: 30px;
+      color: #999;
+    }
+
+    footer a:hover {
+      color: var(--primary-color);
+    }
+
+    @media (max-width: 480px) {
+      .tips-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <a href="../index.html" class="site-name">
+      <i class="fa-solid fa-baby-carriage"></i> ママミーヤ
+    </a>
+  </header>
+
+  <nav class="breadcrumb">
+    <a href="../index.html">ホーム</a>
+    <i class="fa-solid fa-chevron-right"></i>
+    <span>育児ハック</span>
+  </nav>
+
+  <div class="page-header">
+    <h1>育児ハック・tips集</h1>
+    <p>先輩ママたちの知恵と経験をシェア</p>
+  </div>
+
+  <main>
+
+    <div class="category-tabs">
+      <button class="active">すべて</button>
+      <button>寝かしつけ</button>
+      <button>離乳食</button>
+      <button>時短</button>
+      <button>お出かけ</button>
+      <button>イヤイヤ期</button>
+    </div>
+
+    <div class="tips-grid">
+
+      <!-- ハックカード1 -->
+      <a href="sleep-training.html" class="tip-card">
+        <div class="tip-icon">
+          <i class="fa-solid fa-moon"></i>
+        </div>
+        <div class="tip-content">
+          <h3>寝かしつけが楽になる5つのコツ</h3>
+          <p>夜泣きで悩むママ必見！実際に効果があった寝かしつけテクニックをまとめました。ホワイトノイズ、入眠儀式、環境設定など...</p>
+          <span class="tip-label">睡眠</span>
+        </div>
+      </a>
+
+      <!-- ハックカード2 -->
+      <a href="baby-food.html" class="tip-card">
+        <div class="tip-icon">
+          <i class="fa-solid fa-utensils"></i>
+        </div>
+        <div class="tip-content">
+          <h3>時短！離乳食の作り置きレシピ</h3>
+          <p>週末2時間で1週間分の離乳食を作るテクニック。冷凍保存のコツ、解凍方法、おすすめ食材リストも紹介します。</p>
+          <span class="tip-label">離乳食</span>
+        </div>
+      </a>
+
+      <!-- ハックカード3 -->
+      <a href="time-management.html" class="tip-card">
+        <div class="tip-icon">
+          <i class="fa-solid fa-clock"></i>
+        </div>
+        <div class="tip-content">
+          <h3>ワーママの朝を変える時短術</h3>
+          <p>朝のバタバタを解消！前日準備リスト、朝ごはんの時短レシピ、保育園準備のルーティン化など、実践的なtipsをシェア。</p>
+          <span class="tip-label">時短</span>
+        </div>
+      </a>
+
+      <!-- ハックカード4 -->
+      <a href="mom-care.html" class="tip-card">
+        <div class="tip-icon">
+          <i class="fa-solid fa-spa"></i>
+        </div>
+        <div class="tip-content">
+          <h3>ママのセルフケア、5分でできる</h3>
+          <p>忙しい毎日でも自分を大切に。5分でできるリフレッシュ法、隙間時間の使い方、心の整え方をご紹介します。</p>
+          <span class="tip-label">ママケア</span>
+        </div>
+      </a>
+
+      <!-- ハックカード5 -->
+      <a href="outing-checklist.html" class="tip-card">
+        <div class="tip-icon">
+          <i class="fa-solid fa-bag-shopping"></i>
+        </div>
+        <div class="tip-content">
+          <h3>赤ちゃんとのお出かけ完璧チェックリスト</h3>
+          <p>忘れ物ゼロを目指す！月齢別の持ち物リスト、マザーズバッグの整理術、緊急時の対応方法まで網羅しています。</p>
+          <span class="tip-label">お出かけ</span>
+        </div>
+      </a>
+
+      <!-- ハックカード6 -->
+      <a href="iyaiya-taisaku.html" class="tip-card">
+        <div class="tip-icon">
+          <i class="fa-solid fa-face-smile"></i>
+        </div>
+        <div class="tip-content">
+          <h3>イヤイヤ期を乗り切る魔法の言葉</h3>
+          <p>「イヤ！」の連発にどう対応する？選択肢を与える方法、共感の伝え方、効果的な声かけのコツをお教えします。</p>
+          <span class="tip-label">イヤイヤ期</span>
+        </div>
+      </a>
+
+      <!-- ハックカード7 -->
+      <a href="toy-rotation.html" class="tip-card">
+        <div class="tip-icon">
+          <i class="fa-solid fa-puzzle-piece"></i>
+        </div>
+        <div class="tip-content">
+          <h3>おもちゃローテーションで飽きさせない</h3>
+          <p>少ないおもちゃでも長く遊べる工夫。収納方法、入れ替えのタイミング、手作りおもちゃのアイデアも。</p>
+          <span class="tip-label">遊び</span>
+        </div>
+      </a>
+
+      <!-- ハックカード8 -->
+      <a href="bathroom-safety.html" class="tip-card">
+        <div class="tip-icon">
+          <i class="fa-solid fa-bath"></i>
+        </div>
+        <div class="tip-content">
+          <h3>お風呂タイムを楽しく安全に</h3>
+          <p>ワンオペお風呂のコツ、入浴時の安全対策、お風呂嫌いを克服する方法など、お風呂に関するtips集。</p>
+          <span class="tip-label">お風呂</span>
+        </div>
+      </a>
+
+      <!-- ハックカード9 -->
+      <a href="sibling-care.html" class="tip-card">
+        <div class="tip-icon">
+          <i class="fa-solid fa-children"></i>
+        </div>
+        <div class="tip-content">
+          <h3>兄弟育児のバランスの取り方</h3>
+          <p>上の子のケア、赤ちゃん返り対策、二人同時のお世話術など、きょうだい育児の悩みを解決します。</p>
+          <span class="tip-label">兄弟</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="ad-space">
+      <p style="font-size:10px; color:#ccc;">SPONSORED</p>
+    </div>
+
+  </main>
+
+  <footer>
+    <a href="../privacy.html">プライバシーポリシー</a> ｜ 
+    <a href="../contact.html">お問い合わせ</a> ｜
+    <a href="../about.html">このサイトについて</a>
+    <p>&copy; 2025 ママミーヤ</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
