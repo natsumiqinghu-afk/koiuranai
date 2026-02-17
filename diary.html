@@ -1,4 +1,4 @@
----
+﻿---
 layout: default
 title: 育児日記一覧
 ---
@@ -29,32 +29,10 @@ title: 育児日記一覧
     margin: 0 0 10px 0;
   }
 
-  .page-header p {
-    color: #999;
-    font-size: 0.9rem;
-  }
-
-  .month-section {
-    margin-bottom: 50px;
-  }
-
-  .month-title {
-    font-family: 'Shippori Mincho', serif;
-    font-size: 1.4rem;
-    color: var(--primary-color);
-    margin: 0 0 20px 0;
-    padding: 15px 20px;
-    background: var(--white);
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
   .diary-list {
     display: grid;
     gap: 20px;
+    margin-bottom: 30px;
   }
 
   .diary-card {
@@ -64,141 +42,71 @@ title: 育児日記一覧
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     border: 1px solid transparent;
     transition: 0.3s;
-    display: flex;
-    gap: 20px;
   }
 
   .diary-card:hover {
     border-color: var(--accent-color);
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
   }
 
-  .diary-date {
-    flex-shrink: 0;
-    text-align: center;
-    padding: 15px;
-    background: var(--accent-color);
-    border-radius: 10px;
-    min-width: 80px;
+  .date {
+    font-size: 0.85rem;
+    color: #999;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  .diary-date .day {
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--primary-color);
-    line-height: 1;
-  }
-
-  .diary-date .month {
-    font-size: 0.9rem;
-    color: var(--text-color);
-    margin-top: 5px;
-  }
-
-  .diary-content {
-    flex: 1;
-  }
-
-  .diary-content h3 {
+  .diary-card h3 {
     font-family: 'Shippori Mincho', serif;
     font-size: 1.3rem;
     color: var(--primary-color);
-    margin: 0 0 10px 0;
+    margin: 0 0 15px 0;
   }
 
-  .diary-content p {
+  .diary-card p {
     font-size: 0.95rem;
     line-height: 1.8;
-    margin-bottom: 10px;
-    color: #666;
+    margin-bottom: 15px;
   }
 
-  .diary-content .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 15px;
-  }
-
-  .tag {
-    background: #f5f5f5;
-    color: var(--text-color);
-    padding: 4px 12px;
-    border-radius: 15px;
-    font-size: 0.8rem;
+  .read-more {
+    color: var(--primary-color);
+    font-weight: 500;
     display: inline-flex;
     align-items: center;
     gap: 5px;
   }
 
-  @media (max-width: 480px) {
-    .diary-card {
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .diary-date {
-      min-width: auto;
-      padding: 10px 15px;
-    }
-
-    .diary-date .day {
-      display: inline;
-      font-size: 1.5rem;
-    }
-
-    .diary-date .month {
-      display: inline;
-      margin-left: 10px;
-    }
+  .read-more:hover {
+    gap: 10px;
   }
 </style>
 
 <nav class="breadcrumb">
   <a href="{{ site.baseurl }}/">ホーム</a>
   <i class="fa-solid fa-chevron-right"></i>
-  <span>育児日記一覧</span>
+  <span>育児日記</span>
 </nav>
 
 <div class="page-header">
-  <h1>育児日記</h1>
-  <p>毎日の子育ての記録と小さな発見</p>
+  <h1>育児日記一覧</h1>
+  <p>毎日の記録と成長の軌跡</p>
 </div>
 
-<main>
-  {% assign posts_by_month = site.posts | group_by_exp: "post", "post.date | date: '%Y年%-m月'" %}
-  
-  {% for month in posts_by_month %}
-  <section class="month-section">
-    <h2 class="month-title">
+<div class="diary-list">
+  {% for post in site.posts %}
+  <article class="diary-card">
+    <div class="date">
       <i class="fa-regular fa-calendar"></i>
-      {{ month.name }}
-    </h2>
-
-    <div class="diary-list">
-      {% for post in month.items %}
-      <a href="{{ site.baseurl }}{{ post.url }}" class="diary-card">
-        <div class="diary-date">
-          <div class="day">{{ post.date | date: "%-d" }}</div>
-          <div class="month">{{ post.date | date: "%-m月" }}</div>
-        </div>
-        <div class="diary-content">
-          <h3>{{ post.title }}</h3>
-          <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
-          {% if post.tags %}
-          <div class="tags">
-            {% for tag in post.tags limit:3 %}
-            <span class="tag">
-              <i class="fa-solid fa-tag"></i> {{ tag }}
-            </span>
-            {% endfor %}
-          </div>
-          {% endif %}
-        </div>
-      </a>
-      {% endfor %}
+      {{ post.date | date: "%Y年%-m月%-d日" }}
     </div>
-  </section>
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.excerpt | strip_html | truncatewords: 50 }}</p>
+    <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">
+      続きを読む <i class="fa-solid fa-arrow-right"></i>
+    </a>
+  </article>
   {% endfor %}
-</main>
+</div>

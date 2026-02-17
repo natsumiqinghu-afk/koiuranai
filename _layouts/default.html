@@ -4,10 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
-  <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
   
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -20,13 +17,18 @@
       --white: #ffffff;
     }
 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Zen Kaku Gothic New', sans-serif;
       color: var(--text-color);
       background: var(--bg-gradient);
-      margin: 0;
-      line-height: 1.8;
       min-height: 100vh;
+      line-height: 1.6;
     }
 
     a {
@@ -36,7 +38,7 @@
     }
 
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 20px;
     }
@@ -58,12 +60,6 @@
       opacity: 0.8;
     }
 
-    header p {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #999;
-    }
-
     footer {
       text-align: center;
       font-size: 0.8rem;
@@ -75,23 +71,16 @@
     footer a:hover {
       color: var(--primary-color);
     }
-
-    @media (max-width: 480px) {
-      header .site-name {
-        font-size: 1.5rem;
-      }
-    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  
+
   <header>
     <a href="{{ site.baseurl }}/" class="site-name">
       <i class="fa-solid fa-baby-carriage"></i> {{ site.title }}
     </a>
-    <p>{{ site.description }}</p>
   </header>
 
   <main>
