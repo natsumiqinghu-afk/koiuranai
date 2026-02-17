@@ -1,0 +1,48 @@
+# サイト設定
+title: ママミーヤ
+description: 毎日の育児を楽しく！子育てハックと日々の記録
+url: https://mamamiya.jp
+baseurl: ""
+
+# 作者情報
+author:
+  name: ママミーヤ編集部
+
+# ビルド設定
+permalink: /diary/:year/:month/:day/:title/
+timezone: Asia/Tokyo
+
+# コレクション設定
+collections:
+  posts:
+    output: true
+    permalink: /diary/:year-:month-:day-:title/
+
+# デフォルト設定
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "ママミーヤ"
+
+# プラグイン
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# 除外ファイル
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# Markdown設定
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter_opts:
+    disable: true
