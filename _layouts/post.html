@@ -1,0 +1,200 @@
+---
+layout: default
+---
+
+<style>
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: #999;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumb a {
+    color: var(--primary-color);
+  }
+
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  article {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0 10px 25px rgba(255, 139, 167, 0.15);
+    margin-bottom: 30px;
+  }
+
+  .article-header {
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+  }
+
+  .article-date {
+    font-size: 0.9rem;
+    color: #999;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  article h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .article-content h2 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.3rem;
+    color: var(--primary-color);
+    margin: 40px 0 20px;
+    padding-left: 15px;
+    border-left: 4px solid var(--accent-color);
+  }
+
+  .article-content h3 {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin: 30px 0 15px;
+    font-weight: 600;
+  }
+
+  .article-content p {
+    margin-bottom: 1.5em;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid #eee;
+  }
+
+  .tag {
+    background: var(--accent-color);
+    color: var(--text-color);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .post-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .post-nav a {
+    flex: 1;
+    background: var(--white);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border: 1px solid transparent;
+    font-size: 0.9rem;
+  }
+
+  .post-nav a:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+  }
+
+  .post-nav .prev {
+    text-align: left;
+  }
+
+  .post-nav .next {
+    text-align: right;
+  }
+
+  .post-nav .label {
+    font-size: 0.8rem;
+    color: #999;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  @media (max-width: 480px) {
+    article {
+      padding: 30px 20px;
+    }
+    
+    article h1 {
+      font-size: 1.5rem;
+    }
+
+    .post-nav {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<nav class="breadcrumb">
+  <a href="{{ site.baseurl }}/">ホーム</a>
+  <i class="fa-solid fa-chevron-right"></i>
+  <a href="{{ site.baseurl }}/diary.html">育児日記</a>
+  <i class="fa-solid fa-chevron-right"></i>
+  <span>{{ page.date | date: "%Y年%-m月%-d日" }}</span>
+</nav>
+
+<article>
+  <div class="article-header">
+    <div class="article-date">
+      <i class="fa-regular fa-calendar"></i>
+      {{ page.date | date: "%Y年%-m月%-d日（%a）" }}
+    </div>
+    <h1>{{ page.title }}</h1>
+  </div>
+
+  <div class="article-content">
+    {{ content }}
+  </div>
+
+  {% if page.tags %}
+  <div class="tags">
+    {% for tag in page.tags %}
+    <span class="tag">
+      <i class="fa-solid fa-tag"></i> {{ tag }}
+    </span>
+    {% endfor %}
+  </div>
+  {% endif %}
+</article>
+
+<nav class="post-nav">
+  {% if page.previous.url %}
+  <a href="{{ site.baseurl }}{{ page.previous.url }}" class="prev">
+    <span class="label"><i class="fa-solid fa-arrow-left"></i> 前の日記</span>
+    <div>{{ page.previous.title }}</div>
+  </a>
+  {% else %}
+  <a href="{{ site.baseurl }}/diary.html" class="prev">
+    <span class="label"><i class="fa-solid fa-list"></i> 日記一覧へ</span>
+  </a>
+  {% endif %}
+
+  {% if page.next.url %}
+  <a href="{{ site.baseurl }}{{ page.next.url }}" class="next">
+    <span class="label">次の日記 <i class="fa-solid fa-arrow-right"></i></span>
+    <div>{{ page.next.title }}</div>
+  </a>
+  {% else %}
+  <a href="{{ site.baseurl }}/diary.html" class="next">
+    <span class="label">日記一覧へ <i class="fa-solid fa-list"></i></span>
+  </a>
+  {% endif %}
+</nav>

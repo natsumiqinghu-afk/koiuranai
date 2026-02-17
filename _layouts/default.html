@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary-color: #ff8ba7;
+      --accent-color: #ffc6c7;
+      --text-color: #594a4e;
+      --bg-gradient: linear-gradient(135deg, #fff0f3 0%, #fff 100%);
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      color: var(--text-color);
+      background: var(--bg-gradient);
+      margin: 0;
+      line-height: 1.8;
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: 0.3s;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 0 20px;
+    }
+
+    header .site-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      margin: 0;
+      letter-spacing: 0.1em;
+    }
+
+    header .site-name:hover {
+      opacity: 0.8;
+    }
+
+    header p {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #999;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      margin-top: 50px;
+      padding-bottom: 30px;
+      color: #999;
+    }
+
+    footer a:hover {
+      color: var(--primary-color);
+    }
+
+    @media (max-width: 480px) {
+      header .site-name {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  
+  <header>
+    <a href="{{ site.baseurl }}/" class="site-name">
+      <i class="fa-solid fa-baby-carriage"></i> {{ site.title }}
+    </a>
+    <p>{{ site.description }}</p>
+  </header>
+
+  <main>
+    {{ content }}
+  </main>
+
+  <footer>
+    <a href="{{ site.baseurl }}/privacy.html">プライバシーポリシー</a> ｜ 
+    <a href="{{ site.baseurl }}/contact.html">お問い合わせ</a> ｜
+    <a href="{{ site.baseurl }}/about.html">このサイトについて</a>
+    <p>&copy; 2025 {{ site.title }}</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
