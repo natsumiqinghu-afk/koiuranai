@@ -12,12 +12,6 @@ author:
 permalink: /diary/:year/:month/:day/:title/
 timezone: Asia/Tokyo
 
-# コレクション設定
-collections:
-  posts:
-    output: true
-    permalink: /diary/:year-:month-:day-:title/
-
 # デフォルト設定
 defaults:
   - scope:
@@ -39,6 +33,7 @@ exclude:
   - Gemfile.lock
   - node_modules
   - vendor
+  - _site
 
 # Markdown設定
 markdown: kramdown
