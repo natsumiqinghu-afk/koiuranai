@@ -1,0 +1,207 @@
+---
+layout: default
+---
+
+<style>
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: #999;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumb a {
+    color: var(--primary-color);
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .page-header h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+  }
+
+  .age-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .age-card {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border: 1px solid transparent;
+    transition: 0.3s;
+    text-align: center;
+  }
+
+  .age-card:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-5px);
+  }
+
+  .age-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+  }
+
+  .age-card h3 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.3rem;
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+  }
+
+  .age-count {
+    font-size: 0.9rem;
+    color: #999;
+  }
+
+  .age-section {
+    margin-bottom: 50px;
+  }
+
+  .age-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin: 30px 0 20px;
+    padding-left: 15px;
+    border-left: 4px solid var(--accent-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .posts-list {
+    display: grid;
+    gap: 15px;
+  }
+
+  .post-item {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border: 1px solid transparent;
+    transition: 0.3s;
+  }
+
+  .post-item:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+  }
+
+  .post-date {
+    font-size: 0.85rem;
+    color: #999;
+    margin-bottom: 8px;
+  }
+
+  .post-item h3 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+  }
+
+  .post-excerpt {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #666;
+  }
+
+  .empty-message {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+  }
+</style>
+
+<nav class="breadcrumb">
+  <a href="{{ site.baseurl }}/">ホーム</a>
+  <i class="fa-solid fa-chevron-right"></i>
+  <span>月齢別情報</span>
+</nav>
+
+<div class="page-header">
+  <h1>月齢別育児情報</h1>
+  <p>赤ちゃんの成長に合わせた記事を探せます</p>
+</div>
+
+<!-- 月齢カード一覧 -->
+<div class="age-grid">
+  {% assign age_groups = "0-3ヶ月,4-6ヶ月,7-9ヶ月,10-12ヶ月,1歳,2歳,3歳,4歳以上" | split: "," %}
+  
+  {% for age in age_groups %}
+    {% assign age_posts = site.posts | where_exp: "post", "post.age == age" %}
+    <div class="age-card">
+      <div class="age-icon">
+        {% if age == "0-3ヶ月" %}
+          <i class="fa-solid fa-baby"></i>
+        {% elsif age == "4-6ヶ月" %}
+          <i class="fa-solid fa-baby"></i>
+        {% elsif age == "7-9ヶ月" %}
+          <i class="fa-solid fa-baby-carriage"></i>
+        {% elsif age == "10-12ヶ月" %}
+          <i class="fa-solid fa-baby-carriage"></i>
+        {% elsif age == "1歳" %}
+          <i class="fa-solid fa-child"></i>
+        {% elsif age == "2歳" %}
+          <i class="fa-solid fa-child-reaching"></i>
+        {% elsif age == "3歳" %}
+          <i class="fa-solid fa-children"></i>
+        {% else %}
+          <i class="fa-solid fa-children"></i>
+        {% endif %}
+      </div>
+      <h3>{{ age }}</h3>
+      <p class="age-count">{{ age_posts.size }}件の記事</p>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- 月齢別記事一覧 -->
+{% for age in age_groups %}
+  {% assign age_posts = site.posts | where_exp: "post", "post.age == age" %}
+  {% if age_posts.size > 0 %}
+  <section class="age-section">
+    <h2 class="age-title">
+      <i class="fa-solid fa-calendar-days"></i>
+      {{ age }}の記事
+    </h2>
+    
+    <div class="posts-list">
+      {% for post in age_posts limit:10 %}
+      <a href="{{ site.baseurl }}{{ post.url }}" class="post-item">
+        <div class="post-date">
+          <i class="fa-regular fa-calendar"></i>
+          {{ post.date | date: "%Y年%-m月%-d日" }}
+        </div>
+        <h3>{{ post.title }}</h3>
+        <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+{% endfor %}
+
+{% assign total_posts = site.posts | size %}
+{% if total_posts == 0 %}
+<div class="empty-message">
+  <i class="fa-solid fa-inbox" style="font-size: 3rem; color: #ddd; margin-bottom: 20px;"></i>
+  <p>まだ記事がありません</p>
+</div>
+{% endif %}

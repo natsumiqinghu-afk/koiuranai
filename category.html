@@ -1,0 +1,153 @@
+---
+layout: default
+---
+
+<style>
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: #999;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumb a {
+    color: var(--primary-color);
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .page-header h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+  }
+
+  .category-section {
+    margin-bottom: 50px;
+  }
+
+  .category-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin: 30px 0 20px;
+    padding-left: 15px;
+    border-left: 4px solid var(--accent-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .posts-list {
+    display: grid;
+    gap: 15px;
+  }
+
+  .post-item {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border: 1px solid transparent;
+    transition: 0.3s;
+  }
+
+  .post-item:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+  }
+
+  .post-date {
+    font-size: 0.85rem;
+    color: #999;
+    margin-bottom: 8px;
+  }
+
+  .post-item h3 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+  }
+
+  .post-excerpt {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #666;
+  }
+
+  .empty-message {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+  }
+</style>
+
+<nav class="breadcrumb">
+  <a href="{{ site.baseurl }}/">ホーム</a>
+  <i class="fa-solid fa-chevron-right"></i>
+  <span>カテゴリ別</span>
+</nav>
+
+<div class="page-header">
+  <h1>カテゴリ別記事一覧</h1>
+  <p>テーマごとに記事を探せます</p>
+</div>
+
+{% assign categories = site.posts | map: 'categories' | join: ',' | split: ',' | uniq | sort %}
+
+{% for category in categories %}
+  {% if category != "" %}
+  <section class="category-section">
+    <h2 class="category-title">
+      {% if category == "寝かしつけ" %}
+        <i class="fa-solid fa-moon"></i>
+      {% elsif category == "離乳食" %}
+        <i class="fa-solid fa-utensils"></i>
+      {% elsif category == "時短" %}
+        <i class="fa-solid fa-clock"></i>
+      {% elsif category == "お出かけ" %}
+        <i class="fa-solid fa-bag-shopping"></i>
+      {% elsif category == "イヤイヤ期" %}
+        <i class="fa-solid fa-face-smile"></i>
+      {% elsif category == "兄弟" %}
+        <i class="fa-solid fa-children"></i>
+      {% elsif category == "健康" %}
+        <i class="fa-solid fa-heart-pulse"></i>
+      {% elsif category == "遊び" %}
+        <i class="fa-solid fa-puzzle-piece"></i>
+      {% else %}
+        <i class="fa-solid fa-folder"></i>
+      {% endif %}
+      {{ category }}
+    </h2>
+    
+    <div class="posts-list">
+      {% assign category_posts = site.posts | where_exp: "post", "post.categories contains category" %}
+      {% for post in category_posts limit:10 %}
+      <a href="{{ site.baseurl }}{{ post.url }}" class="post-item">
+        <div class="post-date">
+          <i class="fa-regular fa-calendar"></i>
+          {{ post.date | date: "%Y年%-m月%-d日" }}
+        </div>
+        <h3>{{ post.title }}</h3>
+        <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+{% endfor %}
+
+{% if categories.size == 0 %}
+<div class="empty-message">
+  <i class="fa-solid fa-inbox" style="font-size: 3rem; color: #ddd; margin-bottom: 20px;"></i>
+  <p>まだカテゴリ分けされた記事がありません</p>
+</div>
+{% endif %}

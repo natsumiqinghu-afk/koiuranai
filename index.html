@@ -158,6 +158,7 @@ layout: default
 <section class="hero">
   <p>2児のママブログ。<br>毎日更新の育児日記で、一緒に子育てを楽しみましょう。</p>
 </section>
+
 <div class="diary-card" style="margin-bottom: 40px; border-left: 5px solid var(--accent-color);">
   <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
     <div style="font-size: 2.5rem; color: var(--accent-color);">
@@ -183,7 +184,7 @@ layout: default
   </p>
   
   <div style="display: flex; justify-content: center; gap: 20px; font-size: 1.2rem; color: var(--primary-color); margin-top: 10px;">
-    <i class="fa-solid fa-stethoscopes"></i>
+    <i class="fa-solid fa-stethoscope"></i>
     <i class="fa-solid fa-fire-extinguisher"></i>
     <i class="fa-solid fa-baby"></i>
   </div>
@@ -199,7 +200,7 @@ layout: default
       {{ post.date | date: "%Y年%-m月%-d日" }}
     </div>
     <h3>{{ post.title }}</h3>
-    <p>{{ post.excerpt | strip_html | truncatewords: 50 }}</p>
+    <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
     <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">
       続きを読む <i class="fa-solid fa-arrow-right"></i>
     </a>
@@ -226,9 +227,9 @@ layout: default
     <span>育児日記一覧</span>
   </a>
   
-  <a href="{{ site.baseurl }}/tips.html" class="category-card">
-    <i class="fa-solid fa-lightbulb"></i>
-    <span>育児ハック</span>
+  <a href="{{ site.baseurl }}/category.html" class="category-card">
+    <i class="fa-solid fa-folder-open"></i>
+    <span>カテゴリ別</span>
   </a>
   
   <a href="{{ site.baseurl }}/monthly.html" class="category-card">
@@ -242,26 +243,26 @@ layout: default
   </a>
 </div>
 
-<h2>人気の記事</h2>
+<h2>人気のテーマ</h2>
 
 <div class="category-menu">
-  <a href="{{ site.baseurl }}/tips.html#sleep" class="category-card">
+  <a href="{{ site.baseurl }}/category.html#寝かしつけ" class="category-card">
     <i class="fa-solid fa-moon"></i>
     <span>寝かしつけのコツ</span>
   </a>
   
-  <a href="{{ site.baseurl }}/tips.html#food" class="category-card">
+  <a href="{{ site.baseurl }}/category.html#離乳食" class="category-card">
     <i class="fa-solid fa-utensils"></i>
     <span>離乳食レシピ</span>
   </a>
   
-  <a href="{{ site.baseurl }}/tips.html#time" class="category-card">
+  <a href="{{ site.baseurl }}/category.html#時短" class="category-card">
     <i class="fa-solid fa-clock"></i>
     <span>時短テクニック</span>
   </a>
   
-  <a href="{{ site.baseurl }}/tips.html#mom" class="category-card">
-    <i class="fa-solid fa-spa"></i>
-    <span>ママのセルフケア</span>
+  <a href="{{ site.baseurl }}/category.html#イヤイヤ期" class="category-card">
+    <i class="fa-solid fa-face-smile"></i>
+    <span>イヤイヤ期対策</span>
   </a>
 </div>
