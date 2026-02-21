@@ -146,7 +146,7 @@ layout: default
 <nav class="breadcrumb">
   <a href="{{ site.baseurl }}/">ホーム</a>
   <i class="fa-solid fa-chevron-right"></i>
-  <a href="{{ site.baseurl }}/diary.html">育児日記</a>
+  <a href="{{ site.baseurl }}/diary/">育児日記</a>
   <i class="fa-solid fa-chevron-right"></i>
   <span>{{ page.date | date: "%Y年%-m月%-d日" }}</span>
 </nav>
@@ -182,7 +182,7 @@ layout: default
     <div>{{ page.previous.title }}</div>
   </a>
   {% else %}
-  <a href="{{ site.baseurl }}/diary.html" class="prev">
+  <a href="{{ site.baseurl }}/diary/" class="prev">
     <span class="label"><i class="fa-solid fa-list"></i> 日記一覧へ</span>
   </a>
   {% endif %}
@@ -193,7 +193,7 @@ layout: default
     <div>{{ page.next.title }}</div>
   </a>
   {% else %}
-  <a href="{{ site.baseurl }}/diary.html" class="next">
+  <a href="{{ site.baseurl }}/diary/" class="next">
     <span class="label">日記一覧へ <i class="fa-solid fa-list"></i></span>
   </a>
   {% endif %}
