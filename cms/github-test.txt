@@ -1,0 +1,3 @@
+ママミーヤCMS GitHub連携テスト
+
+このファイルはCMSからGitHub APIを使って作成しました。
