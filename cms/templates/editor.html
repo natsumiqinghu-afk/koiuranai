@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% if post %}
+            記事を編集 - ママミーヤ CMS
+        {% else %}
+            新しい記事 - ママミーヤ CMS
+        {% endif %}
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: #f7f7f7;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 400px;
+            line-height: 1.7;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #222;
+            color: white;
+            font-size: 18px;
+        }
+
+        .help {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .notice {
+            background: #fff3cd;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<a
+    class="back"
+    href="/"
+>
+    ← CMSトップへ
+</a>
+
+<h1>
+
+{% if post %}
+    ✏️ 記事を編集
+{% else %}
+    📝 新しい記事
+{% endif %}
+
+</h1>
+
+
+{% if not post or status == "draft" %}
+
+<div class="notice">
+    📝 この記事は「下書き」として保存されます。
+</div>
+
+{% else %}
+
+<div class="notice">
+    🌐 この記事は現在公開されています。
+</div>
+
+{% endif %}
+
+
+{% if post and status == "published" %}
+
+<form
+    action="/update/published/{{ post.filename }}"
+    method="post"
+>
+
+{% elif post and status == "draft" %}
+
+<form
+    action="/update/draft/{{ post.filename }}"
+    method="post"
+>
+
+{% else %}
+
+<form
+    action="/create"
+    method="post"
+>
+
+{% endif %}
+
+
+<label>タイトル</label>
+
+<input
+    type="text"
+    name="title"
+    value="{{ post.title if post else '' }}"
+    placeholder="記事タイトル"
+    required
+>
+
+
+<label>公開日時（予約する場合）</label>
+
+<input
+    type="datetime-local"
+    name="publish_at"
+    value="{{ post.publish_at if post and post.publish_at else '' }}"
+>
+
+<p class="help">
+ここを入力すると予約投稿になります。
+空欄なら下書きとして保存されます。
+</p>
+
+<input
+    type="date"
+    name="date"
+    value="{{ post.date if post else today }}"
+    required
+>
+
+
+<label>カテゴリー</label>
+
+<input
+    type="text"
+    name="category"
+    value="{{ post.category if post else '' }}"
+    placeholder="例：育児, 食事"
+>
+
+<p class="help">
+複数の場合は「,」で区切ります。
+</p>
+
+
+<label>対象年齢</label>
+
+<input
+    type="text"
+    name="age"
+    value="{{ post.age if post else '' }}"
+    placeholder="例：1歳, 3歳"
+>
+
+
+<label>タグ</label>
+
+<input
+    type="text"
+    name="tags"
+    value="{{ post.tags if post else '' }}"
+    placeholder="例：育児, 時短, 子育て"
+>
+
+<p class="help">
+複数の場合は「,」で区切ります。
+</p>
+
+
+<label>本文</label>
+
+<textarea
+    name="body"
+    placeholder="ここに記事本文を書きます。Markdownが使えます。"
+>{{ post.body if post else '' }}</textarea>
+
+
+<button type="submit">
+
+{% if post %}
+    💾 変更を保存
+{% else %}
+    💾 下書き保存
+{% endif %}
+
+</button>
+
+</form>
+
+</body>
+
+</html>

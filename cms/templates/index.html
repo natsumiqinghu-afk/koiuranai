@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ママミーヤ CMS</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background: #f7f7f7;
+            color: #222;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-top: 10px;
+        }
+
+        .new-button {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            margin: 25px 0;
+            background: #222;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+
+        .section-title {
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+
+        .post {
+            background: white;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+
+        .post-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .post-date {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .publish-time {
+            font-size: 14px;
+            margin: 10px 0;
+            padding: 10px;
+            background: #eef5ff;
+            border-radius: 7px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .draft {
+            background: #fff3cd;
+        }
+
+        .scheduled {
+            background: #dbeafe;
+        }
+
+        .published {
+            background: #d1e7dd;
+        }
+
+        .edit-button,
+        .publish-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 12px;
+            border-radius: 7px;
+            text-decoration: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .edit-button {
+            background: #eee;
+            color: #222;
+        }
+
+        .publish-button {
+            background: #222;
+            color: white;
+            margin-top: 8px;
+        }
+        .github-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    border-radius: 7px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    background: #333;
+    color: white;
+    margin-top: 8px;
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📝 ママミーヤ CMS</h1>
+
+    <p>
+        公開済み {{ posts|length }}件 ／
+        下書き {{ drafts|length }}件 ／
+        予約 {{ scheduled|length }}件
+    </p>
+
+    <a
+        href="/new"
+        class="new-button"
+    >
+        ＋ 新しい記事
+    </a>
+
+
+    <!-- 予約投稿 -->
+
+    <h2 class="section-title">
+        📅 予約投稿
+    </h2>
+
+    {% if scheduled %}
+
+        {% for post in scheduled %}
+
+        <div class="post">
+
+            <span class="status scheduled">
+                📅 予約中
+            </span>
+
+            <div class="post-title">
+                {{ post.title }}
+            </div>
+
+            <div class="post-date">
+                記事日：{{ post.date }}
+            </div>
+
+            <div class="publish-time">
+                公開予定：{{ post.publish_at }}
+            </div>
+
+            <a
+                href="/edit/scheduled/{{ post.filename }}"
+                class="edit-button"
+            >
+                ✏️ 編集
+            </a>
+            <form
+    action="/github-save/draft/{{ post.filename }}"
+    method="post"
+>
+
+    <button
+        type="submit"
+        class="github-button"
+    >
+        ☁️ GitHubに保存
+    </button>
+
+</form>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>予約投稿はありません。</p>
+
+    {% endif %}
+
+
+    <!-- 下書き -->
+
+    <h2 class="section-title">
+        📝 下書き
+    </h2>
+
+    {% if drafts %}
+
+        {% for post in drafts %}
+
+        <div class="post">
+
+            <span class="status draft">
+                📝 下書き
+            </span>
+
+            <div class="post-title">
+                {{ post.title }}
+            </div>
+
+            <div class="post-date">
+                {{ post.date }}
+            </div>
+
+            <a
+                href="/edit/draft/{{ post.filename }}"
+                class="edit-button"
+            >
+                ✏️ 編集
+            </a>
+
+            <form
+                action="/publish/{{ post.filename }}"
+                method="post"
+            >
+
+                <button
+                    type="submit"
+                    class="publish-button"
+                >
+                    🌐 今すぐ公開
+                </button>
+
+            </form>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>下書きはありません。</p>
+
+    {% endif %}
+
+
+    <!-- 公開済み -->
+
+    <h2 class="section-title">
+        🌐 公開済み
+    </h2>
+
+    {% for post in posts %}
+
+    <div class="post">
+
+        <span class="status published">
+            🌐 公開済み
+        </span>
+
+        <div class="post-title">
+            {{ post.title }}
+        </div>
+
+        <div class="post-date">
+            {{ post.date }}
+        </div>
+
+        <a
+            href="/edit/published/{{ post.filename }}"
+            class="edit-button"
+        >
+            ✏️ 編集
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+
+</html>
