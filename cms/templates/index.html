@@ -2,7 +2,6 @@
 <html lang="ja">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -13,7 +12,6 @@
     <title>ママミーヤ CMS</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -102,16 +100,18 @@
         }
 
         .edit-button,
-        .publish-button {
+        .publish-button,
+        .github-button,
+        .delete-button {
             display: block;
             width: 100%;
             text-align: center;
             padding: 12px;
             border-radius: 7px;
-            text-decoration: none;
             border: none;
             font-size: 16px;
             cursor: pointer;
+            text-decoration: none;
         }
 
         .edit-button {
@@ -124,20 +124,18 @@
             color: white;
             margin-top: 8px;
         }
-        .github-button {
-    display: block;
-    width: 100%;
-    text-align: center;
-    padding: 12px;
-    border-radius: 7px;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    background: #333;
-    color: white;
-    margin-top: 8px;
-}
 
+        .github-button {
+            background: #333;
+            color: white;
+            margin-top: 8px;
+        }
+
+        .delete-button {
+            background: #dc3545;
+            color: white;
+            margin-top: 8px;
+        }
     </style>
 
 </head>
@@ -196,19 +194,31 @@
             >
                 ✏️ 編集
             </a>
+
             <form
-    action="/github-save/draft/{{ post.filename }}"
-    method="post"
->
+                action="/github-save/scheduled/{{ post.filename }}"
+                method="post"
+            >
+                <button
+                    type="submit"
+                    class="github-button"
+                >
+                    ☁️ GitHubに保存
+                </button>
+            </form>
 
-    <button
-        type="submit"
-        class="github-button"
-    >
-        ☁️ GitHubに保存
-    </button>
-
-</form>
+            <form
+                action="/delete/scheduled/{{ post.filename }}"
+                method="post"
+                onsubmit="return confirm('「{{ post.title }}」を削除しますか？\n\nGitHub上の記事も削除されます。');"
+            >
+                <button
+                    type="submit"
+                    class="delete-button"
+                >
+                    🗑️ 削除
+                </button>
+            </form>
 
         </div>
 
@@ -256,14 +266,25 @@
                 action="/publish/{{ post.filename }}"
                 method="post"
             >
-
                 <button
                     type="submit"
                     class="publish-button"
                 >
                     🌐 今すぐ公開
                 </button>
+            </form>
 
+            <form
+                action="/delete/draft/{{ post.filename }}"
+                method="post"
+                onsubmit="return confirm('「{{ post.title }}」を削除しますか？\n\nGitHub上の記事も削除されます。');"
+            >
+                <button
+                    type="submit"
+                    class="delete-button"
+                >
+                    🗑️ 削除
+                </button>
             </form>
 
         </div>
@@ -305,6 +326,19 @@
         >
             ✏️ 編集
         </a>
+
+        <form
+            action="/delete/published/{{ post.filename }}"
+            method="post"
+            onsubmit="return confirm('「{{ post.title }}」を削除しますか？\n\n⚠️ 公開中の記事がブログからも削除されます。\nGitHub上の記事も削除されます。');"
+        >
+            <button
+                type="submit"
+                class="delete-button"
+            >
+                🗑️ 削除
+            </button>
+        </form>
 
     </div>
 

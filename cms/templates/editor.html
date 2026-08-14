@@ -71,6 +71,12 @@
             background: #222;
             color: white;
             font-size: 18px;
+            cursor: pointer;
+        }
+
+        .delete-button {
+            background: #dc3545;
+            margin-top: 12px;
         }
 
         .help {
@@ -113,6 +119,12 @@
 
 <div class="notice">
     📝 この記事は「下書き」として保存されます。
+</div>
+
+{% elif status == "scheduled" %}
+
+<div class="notice">
+    📅 この記事は「予約投稿」です。
 </div>
 
 {% else %}
@@ -171,6 +183,9 @@
 ここを入力すると予約投稿になります。
 空欄なら下書きとして保存されます。
 </p>
+
+
+<label>公開日</label>
 
 <input
     type="date"
@@ -237,6 +252,27 @@
 </button>
 
 </form>
+
+
+{% if post %}
+
+<form
+    action="/delete/{{ status }}/{{ post.filename }}"
+    method="post"
+    onsubmit="return confirm('「{{ post.title }}」を削除しますか？\n\nGitHub上の記事も削除されます。{% if status == 'published' %}\n\n⚠️ 公開中の記事がブログからも削除されます。{% endif %}');"
+>
+
+    <button
+        type="submit"
+        class="delete-button"
+    >
+        🗑️ この記事を削除
+    </button>
+
+</form>
+
+{% endif %}
+
 
 </body>
 

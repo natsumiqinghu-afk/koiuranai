@@ -131,6 +131,63 @@ def upload_to_github(filepath):
             response.read().decode("utf-8")
         )
 
+def delete_from_github(filepath):
+    """GitHub上の指定ファイルを削除する。存在しなければ何もしない。"""
+    token = os.environ.get("GITHUB_TOKEN")
+
+    if not token:
+        raise Exception("GITHUB_TOKEN が設定されていません")
+
+    relative_path = filepath.relative_to(ROOT_DIR)
+    github_path = str(relative_path).replace("\\", "/")
+    github_path = quote(github_path, safe="/")
+
+    url = (
+        f"https://api.github.com/repos/"
+        f"{GITHUB_OWNER}/{GITHUB_REPO}/contents/{github_path}"
+    )
+
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "Authorization": f"Bearer {token}",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "mamamiya-cms",
+    }
+
+    get_request = urllib.request.Request(url, headers=headers)
+
+    try:
+        with urllib.request.urlopen(get_request) as response:
+            existing = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return
+        raise
+
+    sha = existing.get("sha")
+    if not sha:
+        raise Exception("GitHub上のファイルSHAを取得できませんでした")
+
+    data = {
+        "message": f"CMS: Delete {filepath.name}",
+        "sha": sha,
+        "branch": GITHUB_BRANCH,
+    }
+
+    delete_request = urllib.request.Request(
+        url,
+        data=json.dumps(data).encode("utf-8"),
+        method="DELETE",
+        headers={
+            **headers,
+            "Content-Type": "application/json",
+        },
+    )
+
+    with urllib.request.urlopen(delete_request) as response:
+        return json.loads(response.read().decode("utf-8"))
+
+
 
 def parse_post(filepath, status):
     text = filepath.read_text(encoding="utf-8")
@@ -384,6 +441,11 @@ def update_existing(filename, directory, current_status):
     new_filepath = directory / new_filename
 
     if old_filepath != new_filepath:
+        try:
+            delete_from_github(old_filepath)
+        except Exception as e:
+            return github_error_page(e)
+
         old_filepath.unlink()
 
     new_filepath.write_text(
@@ -393,6 +455,39 @@ def update_existing(filename, directory, current_status):
 
     try:
         upload_to_github(new_filepath)
+    except Exception as e:
+        return github_error_page(e)
+
+    return redirect(url_for("index"))
+
+
+@app.route(
+    "/delete/<status>/<path:filename>",
+    methods=["POST"]
+)
+def delete_post(status, filename):
+    """記事をローカルとGitHubの両方から削除する。"""
+    if status in ("draft", "scheduled"):
+        filepath = DRAFTS_DIR / filename
+        base_dir = DRAFTS_DIR
+    elif status == "published":
+        filepath = POSTS_DIR / filename
+        base_dir = POSTS_DIR
+    else:
+        return "不正なステータスです", 400
+
+    # パス逸脱を防止
+    try:
+        filepath.resolve().relative_to(base_dir.resolve())
+    except ValueError:
+        return "不正なファイルパスです", 400
+
+    if not filepath.exists():
+        return "記事が見つかりません", 404
+
+    try:
+        delete_from_github(filepath)
+        filepath.unlink()
     except Exception as e:
         return github_error_page(e)
 
@@ -446,6 +541,7 @@ def publish_post(filename):
 
     try:
         upload_to_github(published_filepath)
+        delete_from_github(draft_filepath)
     except Exception as e:
         return github_error_page(e)
 
